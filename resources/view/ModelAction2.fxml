@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="a" prefHeight="55.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="title" layoutX="14.0" layoutY="10.0" prefHeight="35.0" prefWidth="225.0" />
+      <Button fx:id="editTitle" layoutX="280.0" layoutY="11.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="125.0" text="Edit Title">
+         <graphic>
+            <ImageView fx:id="i1" fitHeight="25.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/edit.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="editTasks" layoutX="444.0" layoutY="11.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="125.0" text="Edit Tasks">
+         <graphic>
+            <ImageView fx:id="i2" fitHeight="25.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/edit_task.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</AnchorPane>

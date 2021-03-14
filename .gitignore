@@ -1,0 +1,7 @@
+*.class
+*.txt
+*.iml
+
+/out/
+.idea/
+/src/Produc

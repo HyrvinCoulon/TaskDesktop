@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="52.0" prefWidth="499.0" stylesheets="@../styles/try.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="NameList" layoutX="14.0" layoutY="13.0" prefHeight="27.0" prefWidth="221.0" text="TaskList1" />
+      <Button fx:id="show" layoutX="360.0" layoutY="11.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="125.0" stylesheets="@../styles/try.css" text="Afficher">
+         <graphic>
+            <ImageView fitHeight="23.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/show.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</AnchorPane>

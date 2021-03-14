@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="764.0" style="-fx-background-radius: 2em; -fx-border-radius: 2em; -fx-background-color: black;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <BorderPane layoutY="-1.0" prefHeight="480.0" prefWidth="764.0" styleClass="border-pane" stylesheets="@../styles/style.css" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+         <left>
+            <AnchorPane prefHeight="355.0" prefWidth="132.0" style="-fx-background-radius: 0 0 0 2em;" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="386.0" prefWidth="132.0" spacing="15.0">
+                     <children>
+                        <Pane prefHeight="60.0" prefWidth="132.0" />
+                        <Button fx:id="ListButton" alignment="BASELINE_LEFT" graphicTextGap="6.0" mnemonicParsing="false" onAction="#handles" prefHeight="27.0" prefWidth="132.0" text=" List Task">
+                           <graphic>
+                              <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/list.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="AddButton" alignment="BASELINE_LEFT" graphicTextGap="6.0" mnemonicParsing="false" onAction="#handles" prefHeight="27.0" prefWidth="133.0" text=" Add ...">
+                           <graphic>
+                              <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/add.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="DeleteButton" alignment="BASELINE_LEFT" graphicTextGap="6.0" mnemonicParsing="false" onAction="#handles" prefHeight="27.0" prefWidth="141.0" text=" Delete...">
+                           <graphic>
+                              <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true">
+                                 <image>
+                                    <Image url="@../images/close.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="EditButton" alignment="BASELINE_LEFT" graphicTextGap="6.0" mnemonicParsing="false" onAction="#handles" prefHeight="27.0" prefWidth="144.0" text=" Edit ...">
+                           <graphic>
+                              <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/task.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </left>
+         <top>
+            <AnchorPane prefHeight="45.0" prefWidth="790.0" styleClass="anchor" stylesheets="@../styles/style.css" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="close" layoutX="723.0" layoutY="10.0" maxHeight="35.0" maxWidth="35.0" minHeight="27.0" minWidth="27.0" mnemonicParsing="false" onMouseClicked="#closeWindow" prefHeight="27.0" prefWidth="27.0">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/shut.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="reduce" layoutX="690.0" layoutY="10.0" minHeight="27.0" minWidth="27.0" mnemonicParsing="false" onMouseClicked="#reduceWindow" prefHeight="25.0" prefWidth="33.0">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/reduce.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+               </children></AnchorPane>
+         </top>
+         <center>
+            <AnchorPane prefHeight="386.0" prefWidth="641.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+               <children>
+                  <ScrollPane layoutX="14.0" layoutY="3.0" prefHeight="381.0" prefWidth="605.0" style="-fx-background-color: black;" stylesheets="@../styles/ScrollerPane.css">
+                     <content>
+                        <VBox fx:id="boxTask" prefHeight="379.0" prefWidth="603.0" spacing="20.0" styleClass="vbox" stylesheets="@../styles/try.css">
+                           <padding>
+                              <Insets bottom="20.0" right="30.0" top="10.0" />
+                           </padding></VBox>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+         </center>
+         <bottom>
+            <AnchorPane prefHeight="44.0" prefWidth="750.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField fx:id="namer" layoutX="220.0" layoutY="12.0" opacity="0.0" prefHeight="27.0" prefWidth="241.0" promptText="Entrez le titre de la liste" styleClass="text-field" stylesheets="@../styles/style.css" />
+                  <Button fx:id="bAdd" layoutX="503.0" layoutY="9.0" mnemonicParsing="false" onAction="#handles" opacity="0.0" prefHeight="32.0" prefWidth="88.0" style="-fx-border-color: #009BFD; -fx-border-radius: 15;" text="Add Task.." />
+                  <Label fx:id="titleTaskList" layoutX="14.0" layoutY="13.0" prefHeight="24.0" prefWidth="185.0" />
+                  <Button fx:id="aList" layoutX="597.0" layoutY="10.0" mnemonicParsing="false" onAction="#handles" opacity="0.0" prefHeight="32.0" prefWidth="76.0" style="-fx-border-color: #009BFD; -fx-border-radius: 15;" text="Add List" />
+                  <Button fx:id="back" layoutX="694.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBack" opacity="0.0" prefHeight="32.0" prefWidth="54.0">
+                     <graphic>
+                        <ImageView fitHeight="36.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/back.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+               </children>
+            </AnchorPane>
+         </bottom>
+         </BorderPane>
+   </children>
+</AnchorPane>

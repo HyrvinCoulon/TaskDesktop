@@ -1,0 +1,23 @@
+.button{
+  -fx-border-color:#009BFD;
+  -fx-text-fill:#009BFD;
+  -fx-background-color:#FFF;
+  -fx-border-radius:3em;
+  -fx-border-insets:-2;
+  -fx-background-radius:5em;
+}
+
+
+.anchor-pane{
+  -fx-border-color:#009BFD;
+  -fx-border-radius:5em;
+  -fx-background-radius:5em;
+}
+
+.scroll-pane{
+   -fx-background-color:black;
+}
+
+.vbox{
+  -fx-background-color:black;
+}

@@ -1,0 +1,35 @@
+@font-face{
+  font-family:Ailerons;
+  src:url("Ailerons.otf");
+}
+
+.button{
+  -fx-background-color:transparent;
+  -fx-border-color:transparent;
+  -fx-text-fill:#009BFD;
+  -fx-font-size:10pt;
+  -fx-font-family:Ailerons;
+}
+
+.border-pane{
+   -fx-background-radius:2em 2em 1em 1em;
+   -fx-background-color:transparent;
+}
+
+.anchor{
+  -fx-background-color:#FFF;
+  -fx-background-radius:2em 2em 0 0;
+}
+
+.label{
+  -fx-font-size:11pt;
+  -fx-text-fill:white;
+  -fx-font-family:Ailerons;
+}
+
+.text-field{
+   -fx-background-color:transparent;
+   -fx-text-fill: #009BFD;
+   -fx-border-color: #009BFD;
+   -fx-border-width: 0 0 2 0;
+}
