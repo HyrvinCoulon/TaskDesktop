@@ -47,7 +47,8 @@ public class ControllerList {
     @FXML
     public void setId(String s){
         actionButton.setId(s);
-    }//Get the id for the action adding, deleting, edit or checked
+    }
+    //Get the id for the action adding, deleting, edit or checked
     @FXML
     public void Opacity(){
         actionButton.setOpacity(0);

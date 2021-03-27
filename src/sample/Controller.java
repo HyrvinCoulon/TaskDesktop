@@ -1,10 +1,13 @@
 package sample;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 //import org.jetbrains.annotations.*;
 
 import java.io.File;
@@ -282,13 +286,36 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         return n;
     }
 
-    private Node initAdd(String as) throws IOException {
+    private Node initAdd(String as){
         ControllerList c = new ControllerList();
         FXMLLoader fl = new FXMLLoader(getClass().getResource("/view/ModelActionTask.fxml"));
         fl.setController(c);
-        Node nl = fl.load();
+
+        Node nl = null;
+        try {
+            nl = fl.load();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
         c.setLabelTask(as);
         c.Opacity();
+
+        return nl;
+    }
+
+    private Node initAddTask(String st){
+
+        FXMLLoader f = new FXMLLoader(getClass().getResource("/view/ModelTask.fxml"));
+
+        Node nl = null;
+
+        try{
+            nl = f.load();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        ControlModel c = f.getController();
+        c.setLabelTask(st);
 
         return nl;
     }
@@ -399,12 +426,9 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             add = true;
             namer.setText("");
             namer.setPromptText("Entrez la nouvelle tache:");
-            try{
-                for(String as : list.get(aT))
-                    boxTask.getChildren().add(initAdd(as));
-            }catch (IOException e){
-                e.printStackTrace();
-            }
+            for(String as : list.get(aT))
+                boxTask.getChildren().add(initAddTask(as));
+
             System.out.println(aT);
             eIndex = aT;
         }
@@ -490,6 +514,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         aList.setOpacity(1);
         bAdd.setOpacity(1);
     }
+
     private void hide(){
         namer.setOpacity(0);
         aList.setOpacity(0);
@@ -499,15 +524,58 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if(new File("SaveH.txt").exists()){
+        if (new File("SaveH.txt").exists()) {
             try {
                 list = retrieveJ();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             list = new HashMap<>();
         }
         System.out.println(list);
+
+        new thread().start();
+
+        /*Task<Void> task = new Task<Void>() {
+
+            @Override
+            protected Void call() throws Exception {
+                // update message property
+                updateMessage("Hello World 1!");
+
+                Thread.sleep(3000);
+                return null;
+            }
+
+        };
+
+// display message changes as notifications
+        task.messageProperty().addListener((observable, oldMessage, newMessage) ->
+                Notifications.create().title("Essai Text").text("My First Notification Yeeee !!!").darkStyle().show());
+
+// execute long running task on background thread
+        new Thread(task).start();
+    }*/
+    }
+}
+
+class thread extends Thread{
+
+    @Override
+    public void run() {
+        try{
+            Thread.sleep(3000);
+            Notifications.create().title("Title Text").text("My First Notification Yeeee !!!").darkStyle().show();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+            /*Notifications notify = Notifications.create().title("Test")
+                    .text("My First Notfication Yeeee !!!")
+                    .hideAfter(javafx.util.Duration.seconds(3))
+                    .position(Pos.BOTTOM_RIGHT);
+            notify.darkStyle();
+            notify.showInformation();
+            notify.show();*/
     }
 }

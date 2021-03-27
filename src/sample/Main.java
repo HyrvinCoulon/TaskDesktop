@@ -1,12 +1,15 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.controlsfx.control.Notifications;
 
 public class Main extends Application {
 
@@ -18,10 +21,10 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/view/sample.fxml"));
         Scene s = new Scene(root, 764, 480);
         primaryStage.setScene(s);
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Tasked");
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.show();
-
+        
 
         s.setFill(Color.TRANSPARENT);
 
