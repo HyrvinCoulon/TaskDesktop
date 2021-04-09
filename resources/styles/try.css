@@ -1,5 +1,5 @@
 .button{
-  -fx-border-color:#009BFD;
+  -fx-border-color:transparent;
   -fx-text-fill:#009BFD;
   -fx-background-color:#FFF;
   -fx-border-radius:3em;
@@ -9,9 +9,10 @@
 
 
 .anchor-pane{
-  -fx-border-color:#009BFD;
-  -fx-border-radius:5em;
-  -fx-background-radius:5em;
+  /*-fx-border-color:#009BFD;*/
+  -fx-effect: dropshadow(three-pass-box, #009BFD, 10, 0, 0, 0);
+  -fx-border-radius:2em;
+  -fx-background-radius:2em;
 }
 
 .scroll-pane{

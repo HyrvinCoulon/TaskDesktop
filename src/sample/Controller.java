@@ -16,7 +16,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.controlsfx.control.Notifications;
 //import org.jetbrains.annotations.*;
 
 import java.io.File;
@@ -536,48 +535,6 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         System.out.println(list);
 
         new NotifStage();
-        //new thread().start();
-
-        /*Task<Void> task = new Task<Void>() {
-
-            @Override
-            protected Void call() throws Exception {
-                // update message property
-                updateMessage("Hello World 1!");
-
-                Thread.sleep(3000);
-                return null;
-            }
-
-        };
-
-// display message changes as notifications
-        task.messageProperty().addListener((observable, oldMessage, newMessage) ->
-                Notifications.create().title("Essai Text").text("My First Notification Yeeee !!!").darkStyle().show());
-
-// execute long running task on background thread
-        new Thread(task).start();
-    }*/
     }
 }
 
-class thread extends Thread{
-
-    @Override
-    public void run() {
-        try{
-            Thread.sleep(3000);
-            Notifications.create().title("Title Text").text("My First Notification Yeeee !!!")
-                    .darkStyle().show();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-            /*Notifications notify = Notifications.create().title("Test")
-                    .text("My First Notfication Yeeee !!!")
-                    .hideAfter(javafx.util.Duration.seconds(3))
-                    .position(Pos.BOTTOM_RIGHT);
-            notify.darkStyle();
-            notify.showInformation();
-            notify.show();*/
-    }
-}

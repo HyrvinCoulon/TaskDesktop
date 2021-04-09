@@ -1,5 +1,11 @@
 package sample;
 
+import animatefx.animation.AnimationFX;
+import animatefx.animation.FadeIn;
+import animatefx.animation.ZoomOut;
+import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -8,17 +14,20 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
 public class NotifStage extends Stage {
+
+    Parent root;
 
     NotifStage(){
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         //set Stage boundaries to the lower right corner of the visible bounds of the main screen
         this.setX(primaryScreenBounds.getMinX() + primaryScreenBounds.getWidth() - 490);
         this.setY(primaryScreenBounds.getMinY() + primaryScreenBounds.getHeight() - 110);
-        Parent root = null;
+        root = null;
         try {
             root = FXMLLoader.load(getClass().getResource("/view/PopUp.fxml"));
         }catch (IOException e){
@@ -33,6 +42,21 @@ public class NotifStage extends Stage {
 
         this.setScene(s);
         this.show();
+
+
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(5));
+
+        pause.setOnFinished(event -> {
+            AnimationFX fx = new ZoomOut(root);
+            fx.setOnFinished(actionEvent -> {
+                Stage stage = (Stage) root.getScene().getWindow();
+                stage.close();
+            });
+            fx.play();
+            //this.close();
+        });
+        pause.play();
 
     }
 }

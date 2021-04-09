@@ -79,9 +79,9 @@
          <center>
             <AnchorPane prefHeight="386.0" prefWidth="641.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane layoutX="14.0" layoutY="3.0" prefHeight="381.0" prefWidth="605.0" style="-fx-background-color: black;" stylesheets="@../styles/ScrollerPane.css">
+                  <ScrollPane layoutX="14.0" layoutY="3.0" prefHeight="381.0" prefWidth="617.0" style="-fx-background-color: black;" stylesheets="@../styles/ScrollerPane.css">
                      <content>
-                        <VBox fx:id="boxTask" prefHeight="379.0" prefWidth="603.0" spacing="20.0" styleClass="vbox" stylesheets="@../styles/try.css">
+                        <VBox fx:id="boxTask" prefHeight="379.0" prefWidth="615.0" spacing="25.0" styleClass="vbox" stylesheets="@../styles/try.css">
                            <padding>
                               <Insets bottom="20.0" right="30.0" top="10.0" />
                            </padding></VBox>
