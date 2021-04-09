@@ -535,7 +535,8 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         }
         System.out.println(list);
 
-        new thread().start();
+        new NotifStage();
+        //new thread().start();
 
         /*Task<Void> task = new Task<Void>() {
 
@@ -566,7 +567,8 @@ class thread extends Thread{
     public void run() {
         try{
             Thread.sleep(3000);
-            Notifications.create().title("Title Text").text("My First Notification Yeeee !!!").darkStyle().show();
+            Notifications.create().title("Title Text").text("My First Notification Yeeee !!!")
+                    .darkStyle().show();
         }catch(Exception e){
             e.printStackTrace();
         }
