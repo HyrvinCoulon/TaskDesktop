@@ -518,7 +518,6 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         namer.setOpacity(0);
         aList.setOpacity(0);
         bAdd.setOpacity(0);
-        //actionED.setOpacity(0);
     }//Hide Components for modify tasklist
 
     @Override
@@ -534,7 +533,24 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         }
         System.out.println(list);
 
+        Thread t = new Thread(() -> {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Platform.runLater(new Tester());
+        });
+        t.start();
+
+
+    }
+
+}
+
+class Tester implements Runnable{
+    @Override
+    public void run() {
         new NotifStage();
     }
 }
-

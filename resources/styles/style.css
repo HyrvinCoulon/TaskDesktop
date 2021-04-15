@@ -11,6 +11,10 @@
   -fx-font-family:Ailerons;
 }
 
+.button:hover{
+   -fx-background-color:#ECECEC;
+}
+
 .border-pane{
    -fx-background-radius:2em 2em 1em 1em;
    -fx-background-color:transparent;
