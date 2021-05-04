@@ -12,7 +12,7 @@
 }
 
 .button:hover{
-   -fx-background-color:#ECECEC;
+   -fx-effect: dropshadow(three-pass-box, #009BFD, 15, 0, 0, 0);
 }
 
 .border-pane{

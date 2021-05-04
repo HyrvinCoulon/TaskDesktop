@@ -67,23 +67,25 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             case 1:
                 hide();
                 if(edit) {
-                    back.setOpacity(0);
+
                     boxTask.getChildren().clear();
                     initEdit();
                     displayTracker--;
                 }
                 if(delete){
-                    back.setOpacity(0);
+
                     boxTask.getChildren().clear();
                     initDelete();
                     displayTracker--;
                 }
                 if(add){
-                    back.setOpacity(0);
+
+                    namer.setPromptText("Entrez le titre de la liste..");
                     boxTask.getChildren().clear();
                     init();
                     displayTracker--;
                 }
+                back.setOpacity(0);
                 break;
             case 2:
                 hide();
@@ -119,7 +121,6 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         if(e.getSource() == ListButton){ // Show the List of List
             hide();
             boxTask.getChildren().clear();
-            int i = 0;
             for(String as : list.keySet()){
                 ControllerList cL = new ControllerList();
                 FXMLLoader f = new FXMLLoader(getClass().getResource("/view/ListTask.fxml"));
@@ -377,7 +378,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         String sl = b.getId();
 
         System.out.println(sl);
-        // int t = Access.isInt(b.getId()) ? Integer.parseInt(b.getId()) : -1;
+
         String ta = null, te = null, dT = null, dd = null, dTs = null, aT = null, el = null;
         switch (b.getId().split(" ")[0]) {
             case "e":
