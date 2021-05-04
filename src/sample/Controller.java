@@ -66,24 +66,20 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         switch (displayTracker){
             case 1:
                 hide();
+                boxTask.getChildren().clear();
                 if(edit) {
-
-                    boxTask.getChildren().clear();
                     initEdit();
                     displayTracker--;
                 }
                 if(delete){
-
-                    boxTask.getChildren().clear();
                     initDelete();
                     displayTracker--;
                 }
                 if(add){
-
-                    namer.setPromptText("Entrez le titre de la liste..");
-                    boxTask.getChildren().clear();
+                    namer.setPromptText("Entrez le titre de la liste");
                     init();
                     displayTracker--;
+                    add = false;
                 }
                 back.setOpacity(0);
                 break;
@@ -105,7 +101,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                 }
                 if(add){
                     add = false;
-                    namer.setPromptText("Entrez le titre de la liste..");
+                    namer.setPromptText("Entrez le titre de la liste");
                     back.setOpacity(0);
                     boxTask.getChildren().clear();
                     init();
@@ -164,7 +160,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                 list.remove(eIndex);
                 save(list);
             }else{
-                if(!namer.getText().isEmpty()) {
+                if(namer.getPromptText().equals("Entrez le titre de la liste")) {
                     titleTaskList.setText(namer.getText());
                     namer.setText("");
                     namer.setPromptText("Entrer les différentes taches :");
@@ -184,7 +180,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
 
             list = retrieveJ();
 
-            ss.clear();
+            ss = new ArrayList<>();
         }else if(e.getSource() == EditButton){// Show the display for modification of the list
             hide();
             boxTask.getChildren().clear();
@@ -534,13 +530,16 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         }
         System.out.println(list);
 
+
         Thread t = new Thread(() -> {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while(true) {
+                try {
+                    Thread.sleep(32000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(new Tester());
             }
-            Platform.runLater(new Tester());
         });
         t.start();
 
