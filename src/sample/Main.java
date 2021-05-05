@@ -18,7 +18,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         //System.out.println(getClass().getResource("/view/sample.fxml"));
         Parent root = FXMLLoader.load(getClass().getResource("/view/sample.fxml"));
-        Scene s = new Scene(root, 764, 480);
+        Scene s = new Scene(root, 851, 480);
         primaryStage.setScene(s);
         primaryStage.setTitle("Tasked");
         primaryStage.initStyle(StageStyle.TRANSPARENT);

@@ -11,9 +11,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 //import org.jetbrains.annotations.*;
@@ -31,16 +33,22 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     ArrayList<ArrayList<String>> al;
     ArrayList<Tasks> s = new ArrayList<>();
     ArrayList<Tasks> ss = new ArrayList<>();
-    HashMap<String, ArrayList<Tasks>> list;
+    static HashMap<String, ArrayList<Tasks>> list;
 
 
     int lindex, displayTracker = 0, cpt = 0;
     private Boolean add = false, delete, edit = false;
 
-    String t, eIndex;
+    static String eIndex;
 
     @FXML
-    private Button ListButton, DeleteButton, close, reduce,AddButton, EditButton, bAdd, aList, back;
+    ScrollPane scrollpane;
+
+    @FXML
+    AnchorPane feedpane;
+
+    @FXML
+    private Button ListButton, DeleteButton, feed, reduce,AddButton, EditButton, bAdd, aList, back;
 
     @FXML
     private TextField namer;
@@ -115,6 +123,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     @FXML
     public void handles(ActionEvent e) throws IOException { //Action doing by the main buttons List, Add, Delete and Edit
 
+        mainpart();
         if(e.getSource() == ListButton){ // Show the List of List
             hide();
             boxTask.getChildren().clear();
@@ -202,8 +211,22 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             delete = true;
             boxTask.getChildren().clear();
             initDelete();
+        }else if(e.getSource() == feed){
+            feedpart();
         }
 
+    }
+
+    private void feedpart(){
+        scrollpane.setOpacity(0);
+        feedpane.toFront();
+        feedpane.setOpacity(1);
+    }
+
+    private void mainpart(){
+        feedpane.setOpacity(0);
+        scrollpane.toFront();
+        scrollpane.setOpacity(1);
     }
 
     private void initEdit() throws IOException {
@@ -279,13 +302,35 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             e.printStackTrace();
         }
         cL.setLabelTask(s);
-        cL.setImage(new Image(String.valueOf(getClass().getResource("/images/progress.png"))));
-        cL.setStringB("En cours ..");
+        cL.setActionButtonId(s);
+
+        if(!list.get(eIndex).get(find(s)).isDone()) {
+            cL.setImage(new Image(String.valueOf(getClass().getResource("/images/checked.png"))));
+            cL.setStringB("Terminée");
+            list.get(eIndex).get(find(s)).setDone(true);
+        }else{
+            cL.setImage(new Image(String.valueOf(getClass().getResource("/images/progress.png"))));
+            cL.setStringB("En cours ..");
+            list.get(eIndex).get(find(s)).setDone(false);
+        }
+
         cL.setAction(actionEvent1 -> {
             Button bn = (Button) actionEvent1.getSource();
-            if(bn.getId().equals("actionButton")){
-                cL.setImage(new Image(String.valueOf(getClass().getResource("/images/checked.png"))));
-                cL.setStringB("Terminée");
+            if(bn.getId().split(" ")[0].equals("actionButton")){
+                if(!list.get(eIndex).get(find(s)).isDone()) {
+                    cL.setImage(new Image(String.valueOf(getClass().getResource("/images/checked.png"))));
+                    cL.setStringB("Terminée");
+                    list.get(eIndex).get(find(s)).setDone(true);
+                }else{
+                    cL.setImage(new Image(String.valueOf(getClass().getResource("/images/progress.png"))));
+                    cL.setStringB("En cours ..");
+                    list.get(eIndex).get(find(s)).setDone(false);
+                }
+                try {
+                    save(list);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         return n;
@@ -441,6 +486,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         //Take to the display of taskList selected
         if(list.size() != 0) {
             boxTask.getChildren().clear();
+            eIndex = sl;
             if(list.containsKey(sl))
                 for (Tasks ts : list.get(sl))
                     boxTask.getChildren().add(intiTask(ts.getTitle()));
@@ -551,8 +597,19 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             }
         });
         t.start();
+    }
 
 
+    private static int find(String s){
+        int i = 0;
+        for(Tasks t : list.get(eIndex)){
+            if(t.getTitle().equals(s)){
+                return i;
+            }else{
+                i++;
+            }
+        }
+        return i;
     }
 
 }

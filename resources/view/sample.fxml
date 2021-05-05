@@ -4,10 +4,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="764.0" style="-fx-background-radius: 2em; -fx-border-radius: 2em; -fx-background-color: black;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="851.0" style="-fx-background-radius: 2em; -fx-border-radius: 2em; -fx-background-color: black;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <BorderPane layoutY="-1.0" prefHeight="480.0" prefWidth="764.0" styleClass="border-pane" stylesheets="@../styles/style.css" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
+      <BorderPane layoutY="-1.0" prefHeight="480.0" prefWidth="851.0" styleClass="border-pane" stylesheets="@../styles/style.css" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-1.0">
          <left>
             <AnchorPane prefHeight="355.0" prefWidth="132.0" style="-fx-background-radius: 0 0 0 2em;" BorderPane.alignment="CENTER">
                <children>
@@ -32,7 +33,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="DeleteButton" alignment="BASELINE_LEFT" graphicTextGap="6.0" mnemonicParsing="false" onAction="#handles" prefHeight="27.0" prefWidth="141.0" text=" Delete...">
+                        <Button fx:id="DeleteButton" alignment="BASELINE_LEFT" graphicTextGap="6.0" mnemonicParsing="false" onAction="#handles" prefHeight="27.0" prefWidth="141.0" text=" Delete..">
                            <graphic>
                               <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true">
                                  <image>
@@ -50,6 +51,15 @@
                               </ImageView>
                            </graphic>
                         </Button>
+                        <Button fx:id="feed" alignment="BASELINE_LEFT" graphicTextGap="6.0" mnemonicParsing="false" onAction="#handles" prefHeight="30.0" prefWidth="147.0" text="feedback">
+                           <graphic>
+                              <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/feedback.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                      </children>
                   </VBox>
                </children>
@@ -58,7 +68,7 @@
          <top>
             <AnchorPane prefHeight="45.0" prefWidth="790.0" styleClass="anchor" stylesheets="@../styles/style.css" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="close" layoutX="723.0" layoutY="10.0" maxHeight="35.0" maxWidth="35.0" minHeight="27.0" minWidth="27.0" mnemonicParsing="false" onMouseClicked="#closeWindow" prefHeight="27.0" prefWidth="27.0">
+                  <Button fx:id="close" layoutX="815.0" layoutY="10.0" maxHeight="35.0" maxWidth="35.0" minHeight="27.0" minWidth="27.0" mnemonicParsing="false" onMouseClicked="#closeWindow" prefHeight="27.0" prefWidth="27.0">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -66,7 +76,7 @@
                            </image>
                         </ImageView>
                      </graphic></Button>
-                  <Button fx:id="reduce" layoutX="690.0" layoutY="10.0" minHeight="27.0" minWidth="27.0" mnemonicParsing="false" onMouseClicked="#reduceWindow" prefHeight="25.0" prefWidth="33.0">
+                  <Button fx:id="reduce" layoutX="777.0" layoutY="10.0" minHeight="27.0" minWidth="27.0" mnemonicParsing="false" onMouseClicked="#reduceWindow" prefHeight="25.0" prefWidth="33.0">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -77,11 +87,30 @@
                </children></AnchorPane>
          </top>
          <center>
-            <AnchorPane prefHeight="386.0" prefWidth="641.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="386.0" prefWidth="657.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane layoutX="14.0" layoutY="3.0" prefHeight="381.0" prefWidth="617.0" style="-fx-background-color: black;" stylesheets="@../styles/ScrollerPane.css">
+                  <AnchorPane fx:id="feedpane" opacity="0.0" prefHeight="387.0" prefWidth="719.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="242.0" layoutY="14.0" prefHeight="36.0" prefWidth="235.0" stylesheets="@../styles/style.css" text="Feedback">
+                           <font>
+                              <Font size="22.0" />
+                           </font>
+                        </Label>
+                        <TextField layoutX="156.0" layoutY="78.0" prefHeight="27.0" prefWidth="402.0" promptText="Votre email ..." styleClass="text-field" stylesheets="@../styles/style.css" />
+                        <TextArea layoutX="157.0" layoutY="123.0" prefHeight="200.0" prefWidth="401.0" promptText="Votre commentaire..." style="-fx-background-color: black;" styleClass="text-area" stylesheets="@../styles/style.css" />
+                        <Button layoutX="299.0" layoutY="336.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Send">
+                           <graphic>
+                              <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/send.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                     </children>
+                  </AnchorPane>
+                  <ScrollPane fx:id="scrollpane" layoutX="2.0" layoutY="3.0" prefHeight="381.0" prefWidth="714.0" style="-fx-background-color: black;" stylesheets="@../styles/ScrollerPane.css">
                      <content>
-                        <VBox fx:id="boxTask" prefHeight="379.0" prefWidth="615.0" spacing="25.0" styleClass="vbox" stylesheets="@../styles/try.css">
+                        <VBox fx:id="boxTask" prefHeight="379.0" prefWidth="712.0" spacing="25.0" styleClass="vbox" stylesheets="@../styles/try.css">
                            <padding>
                               <Insets bottom="20.0" right="30.0" top="10.0" />
                            </padding></VBox>

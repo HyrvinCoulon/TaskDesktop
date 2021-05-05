@@ -70,6 +70,11 @@ public class ControllerList {
     }
 
     @FXML
+    public void setActionButtonId(String s){
+        actionButton.setId(actionButton.getId() + " " + s);
+    }
+
+    @FXML
     public void setActionShow(EventHandler<ActionEvent> e){
         show.setOnAction(e);
     }//It will work only for task to do.

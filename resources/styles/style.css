@@ -40,3 +40,53 @@
    -fx-border-color: #009BFD;
    -fx-border-width: 0 0 2 0;
 }
+
+.text-area{
+   text-area-background:black;
+   -fx-text-fill: #009BFD;
+   -fx-border-color: #009BFD;
+   -fx-border-width: 0 0 2 0;
+}
+
+.text-area .content{
+   -fx-background-color:text-area-background;
+}
+
+
+.text-area .scroll-bar:vertical,
+.text-area .scroll-bar:horizontal
+{
+    -fx-background-color: black;
+    -fx-background-radius: 0;
+
+}
+
+.text-area .scroll-bar:vertical .track
+{
+    -fx-background-color: black;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 2em;
+}
+
+
+.text-area .scroll-bar:horizontal .decrement-button
+{
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 0 10 0;
+}
+
+.text-area .scroll-bar:vertical .decrement-button
+{
+
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 10 0 0;
+}
+
+.text-area .scroll-bar .increment-arrow,
+.text-area .scroll-bar .decrement-arrow
+{
+    -fx-padding: -2;
+}
