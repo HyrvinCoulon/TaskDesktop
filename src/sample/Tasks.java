@@ -1,10 +1,14 @@
 package sample;
 
-public class Task {
+import java.io.Serializable;
+
+public class Tasks implements Serializable {
     private String title = "";
     private boolean done = false;
 
-
+    Tasks(String title){
+        this.title = title;
+    }
 
     public String getTitle() {
         return title;

@@ -30,7 +30,7 @@ public class ControllerList {
     private Button actionButton, show;
 
     @FXML
-    public void setLabelTask(String s){ //Name for Task
+    public void setLabelTask(String s){ //Name for Tasks
         labelTask.setText(s);
     }
 
@@ -61,7 +61,7 @@ public class ControllerList {
     //END..
 
 
-    //List Task Party
+    //List Tasks Party
 
     //Action for the display of the tasks
     @FXML

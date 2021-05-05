@@ -96,29 +96,18 @@ final class Access {
         return t;
     }
 
-    public static HashMap<String, ArrayList<String>> retrieveH() throws FileNotFoundException {
+    public static HashMap<String, ArrayList<Tasks>> retrieveH() throws FileNotFoundException {
         File f = new File("SaveH.txt");
-        /*HashMap<String, ArrayList<String>> t;
-        try{
-            FileInputStream fin = new FileInputStream(f);
-            ois = new ObjectInputStream(fin);
 
-            t = (HashMap<String, ArrayList<String>>) ois.readObject();
-            ois.close();
-
-        } catch (IOException | ClassNotFoundException e) {
-            return null;
-        }
-        return t;*/
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(f))) {
-            return (HashMap<String, ArrayList<String>>) is.readObject();
+            return (HashMap<String, ArrayList<Tasks>>) is.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static void saveString(HashMap<String, ArrayList<String>> t) throws IOException {
+    public static void saveString(HashMap<String, ArrayList<Tasks>> t) throws IOException {
         File f = new File("SaveH.txt");
 
         try{

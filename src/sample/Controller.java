@@ -29,8 +29,9 @@ import java.util.ResourceBundle;
 public class Controller implements EventHandler<ActionEvent>, Initializable {
 
     ArrayList<ArrayList<String>> al;
-    ArrayList<String> s, ss = new ArrayList<>();
-    HashMap<String, ArrayList<String>> list;
+    ArrayList<Tasks> s = new ArrayList<>();
+    ArrayList<Tasks> ss = new ArrayList<>();
+    HashMap<String, ArrayList<Tasks>> list;
 
 
     int lindex, displayTracker = 0, cpt = 0;
@@ -88,15 +89,15 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                 if(edit) {
                     boxTask.getChildren().clear();
                     int i = 0;
-                    for (String sT : list.get(eIndex))
-                        boxTask.getChildren().add(initEditTask(sT, String.valueOf(i++)));
+                    for (Tasks sT : list.get(eIndex))
+                        boxTask.getChildren().add(initEditTask(sT.getTitle(), String.valueOf(i++)));
                     displayTracker--;
                 }
                 if(delete){
                     boxTask.getChildren().clear();
                     int i = 0;
-                    for (String sT : list.get(eIndex))
-                        boxTask.getChildren().add(initDeleteTask(sT, String.valueOf(i++)));
+                    for (Tasks sT : list.get(eIndex))
+                        boxTask.getChildren().add(initDeleteTask(sT.getTitle(), String.valueOf(i++)));
                     displayTracker--;
                 }
                 if(add){
@@ -133,33 +134,41 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             boxTask.getChildren().clear();
             init();
         }else if(e.getSource() == bAdd){ // Depend on which boolean is set
+
             if(add && displayTracker == 2){
                 boxTask.getChildren().add(initAdd(namer.getText()));
-                list.get(eIndex).add(namer.getText());
+                list.get(eIndex).add(new Tasks(namer.getText()));
                 namer.setText("");
                 save(list);
             }else if(add) { // Will add tasks
-                ss.add(namer.getText());
+
+                ss.add(new Tasks(namer.getText()));
                 add(namer.getText());
                 namer.setText("");
                 save(list);
+
             }else if(edit && displayTracker == 2){ // Will modify Title of Tasks
-                list.get(eIndex).set(lindex, namer.getText());
+
+                list.get(eIndex).set(lindex, new Tasks(namer.getText()));
                 namer.setText("");
                 save(list);
+
             }else if(edit){// Will modify Title of list
                 s = list.get(eIndex);
                 list.remove(eIndex);
                 list.put(namer.getText().replace(" ", "_"), s);
                 namer.setText("");
                 save(list);
-            }else if(delete && displayTracker == 2){
+
+            }else if(delete && displayTracker == 2){ // delete Tasks
                 list.get(eIndex).remove(lindex);
                 save(list);
-            }else if(delete){
+
+            }else if(delete){ // Delete List
                 list.remove(eIndex);
                 save(list);
             }else{
+
                 if(namer.getPromptText().equals("Entrez le titre de la liste")) {
                     titleTaskList.setText(namer.getText());
                     namer.setText("");
@@ -169,7 +178,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             }
         }else if(e.getSource() == aList){ // Will add the new List to The super List
 
-            System.out.println(ss);
+            //System.out.println(ss);
 
             list.put(titleTaskList.getText().replace(" ", "_"), ss);
             System.out.println(list);
@@ -187,7 +196,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             delete = add = false;
             edit = true;
             initEdit();
-        }else if(e.getSource() == DeleteButton){
+        }else if(e.getSource() == DeleteButton){ // Part Of Deletion
             hide();
             edit = add = false;
             delete = true;
@@ -228,11 +237,11 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
 
 
 
-    private void save(HashMap<String, ArrayList<String>> l) throws IOException {
+    private void save(HashMap<String, ArrayList<Tasks>> l) throws IOException {
         Access.saveString(l);
     }
 
-    private HashMap<String, ArrayList<String>> retrieveJ() throws FileNotFoundException {
+    private HashMap<String, ArrayList<Tasks>> retrieveJ() throws FileNotFoundException {
         return  Access.retrieveH();
     }
 
@@ -422,8 +431,8 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             add = true;
             namer.setText("");
             namer.setPromptText("Entrez la nouvelle tache:");
-            for(String as : list.get(aT))
-                boxTask.getChildren().add(initAddTask(as));
+            for(Tasks as : list.get(aT))
+                boxTask.getChildren().add(initAddTask(as.getTitle()));
 
             System.out.println(aT);
             eIndex = aT;
@@ -433,8 +442,8 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         if(list.size() != 0) {
             boxTask.getChildren().clear();
             if(list.containsKey(sl))
-                for (String ts : list.get(sl))
-                    boxTask.getChildren().add(intiTask(ts));
+                for (Tasks ts : list.get(sl))
+                    boxTask.getChildren().add(intiTask(ts.getTitle()));
         }
 
 
@@ -474,8 +483,8 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             try {
                 save(list);
                 int i = 0;
-                for(String sT : list.get(eIndex))
-                    boxTask.getChildren().add(initDeleteTask(sT, String.valueOf(i++)));
+                for(Tasks sT : list.get(eIndex))
+                    boxTask.getChildren().add(initDeleteTask(sT.getTitle(), String.valueOf(i++)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -487,8 +496,8 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             back.setOpacity(1);
             displayTracker++;
             int i = 0;
-            for(String sT : list.get(te))
-                boxTask.getChildren().add(initEditTask(sT, String.valueOf(i++)));
+            for(Tasks sT : list.get(te))
+                boxTask.getChildren().add(initEditTask(sT.getTitle(), String.valueOf(i++)));
             eIndex = te;
         }
 
@@ -497,8 +506,8 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             back.setOpacity(1);
             displayTracker++;
             int i = 0;
-            for(String sT : list.get(dTs))
-                boxTask.getChildren().add(initDeleteTask(sT, String.valueOf(i++)));
+            for(Tasks sT : list.get(dTs))
+                boxTask.getChildren().add(initDeleteTask(sT.getTitle(), String.valueOf(i++)));
             eIndex = dTs;
         }
 
@@ -534,7 +543,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         Thread t = new Thread(() -> {
             while(true) {
                 try {
-                    Thread.sleep(32000);
+                    Thread.sleep(2000 * 60 * 60);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
