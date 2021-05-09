@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
 
 final class Access {
 
@@ -151,5 +154,52 @@ final class Access {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void Feedback(String a, String m){
+
+         // Recipient's email ID needs to be mentioned.
+         String to = "bangolamoukogho@gmail.com";
+
+         // Sender's email ID needs to be mentioned
+         //String from = "bomyron891@gmail.com";
+
+         // Assuming you are sending email from localhost
+         String host = "smtp.example.com";
+
+
+         // Get system properties
+         Properties properties = System.getProperties();
+
+         //String host = "smtp.gmail.com";
+         Session session = Session.getInstance(properties, null);
+
+         // Setup mail server
+         properties.put("mail.smtp.host", host);
+         //properties.put("mail.smtp.port", "465");
+
+         try {
+             // Create a default MimeMessage object.
+             MimeMessage message = new MimeMessage(session);
+
+             // Set From: header field of the header.
+             message.setFrom(new InternetAddress(a));
+
+             // Set To: header field of the header.
+             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+
+             // Set Subject: header field
+             message.setSubject("Feedback : Desktop App");
+
+             // Now set the actual message
+             message.setText(m);
+
+             // Send message
+             Transport.send(message);
+             System.out.println("Sent message successfully....");
+         } catch (MessagingException mex) {
+             mex.printStackTrace();
+         }
+
     }
 }

@@ -96,9 +96,9 @@
                               <Font size="22.0" />
                            </font>
                         </Label>
-                        <TextField layoutX="156.0" layoutY="78.0" prefHeight="27.0" prefWidth="402.0" promptText="Votre email ..." styleClass="text-field" stylesheets="@../styles/style.css" />
-                        <TextArea layoutX="157.0" layoutY="123.0" prefHeight="200.0" prefWidth="401.0" promptText="Votre commentaire..." style="-fx-background-color: black;" styleClass="text-area" stylesheets="@../styles/style.css" />
-                        <Button layoutX="299.0" layoutY="336.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Send">
+                        <TextField fx:id="emailadd" layoutX="156.0" layoutY="78.0" prefHeight="27.0" prefWidth="402.0" promptText="Votre email ..." styleClass="text-field" stylesheets="@../styles/style.css" />
+                        <TextArea fx:id="feedcomment" layoutX="157.0" layoutY="123.0" prefHeight="200.0" prefWidth="401.0" promptText="Votre commentaire..." style="-fx-background-color: black;" styleClass="text-area" stylesheets="@../styles/style.css" />
+                        <Button fx:id="sendfeed" layoutX="299.0" layoutY="336.0" mnemonicParsing="false" onAction="#handleFeed" prefHeight="30.0" prefWidth="122.0" text="Send">
                            <graphic>
                               <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

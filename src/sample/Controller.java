@@ -9,10 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -30,13 +27,12 @@ import java.util.ResourceBundle;
 
 public class Controller implements EventHandler<ActionEvent>, Initializable {
 
-    ArrayList<ArrayList<String>> al;
     ArrayList<Tasks> s = new ArrayList<>();
     ArrayList<Tasks> ss = new ArrayList<>();
     static HashMap<String, ArrayList<Tasks>> list;
 
 
-    int lindex, displayTracker = 0, cpt = 0;
+    int lindex, displayTracker = 0;
     private Boolean add = false, delete, edit = false;
 
     static String eIndex;
@@ -48,13 +44,15 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     AnchorPane feedpane;
 
     @FXML
-    private Button ListButton, DeleteButton, feed, reduce,AddButton, EditButton, bAdd, aList, back;
+    private Button ListButton, DeleteButton, feed, reduce,AddButton, EditButton, bAdd, aList, back, sendfeed;
 
     @FXML
-    private TextField namer;
+    private TextField namer, emailadd;
 
     @FXML
     private Label titleTaskList;
+
+    @FXML private TextArea feedcomment;
 
     @FXML
     private VBox boxTask;
@@ -123,6 +121,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     @FXML
     public void handles(ActionEvent e) throws IOException { //Action doing by the main buttons List, Add, Delete and Edit
 
+        checker();
         mainpart();
         if(e.getSource() == ListButton){ // Show the List of List
             hide();
@@ -304,14 +303,12 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         cL.setLabelTask(s);
         cL.setActionButtonId(s);
 
-        if(!list.get(eIndex).get(find(s)).isDone()) {
+        if(list.get(eIndex).get(find(s)).isDone()) {
             cL.setImage(new Image(String.valueOf(getClass().getResource("/images/checked.png"))));
             cL.setStringB("Terminée");
-            list.get(eIndex).get(find(s)).setDone(true);
         }else{
             cL.setImage(new Image(String.valueOf(getClass().getResource("/images/progress.png"))));
             cL.setStringB("En cours ..");
-            list.get(eIndex).get(find(s)).setDone(false);
         }
 
         cL.setAction(actionEvent1 -> {
@@ -583,7 +580,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         } else {
             list = new HashMap<>();
         }
-        System.out.println(list);
+        //System.out.println(list);
 
 
         Thread t = new Thread(() -> {
@@ -612,6 +609,30 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         return i;
     }
 
+    private void checker(){
+        int i = 0;
+        if(eIndex != null) {
+            for (Tasks t : list.get(eIndex))
+                if (!t.isDone())
+                    i++;
+
+
+            if (i == 0) {
+                for (Tasks t : list.get(eIndex))
+                    t.setDone(false);
+            }
+        }
+    }
+
+    private void feeback(String ad, String mes){
+        Access.Feedback(ad, mes);
+    }
+
+    @FXML
+    public void handleFeed(ActionEvent actionEvent) {
+        if(actionEvent.getSource() == sendfeed)
+            feeback(emailadd.getText(), feedcomment.getText());
+    }
 }
 
 class Tester implements Runnable{
