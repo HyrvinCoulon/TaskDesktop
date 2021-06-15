@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
@@ -201,5 +199,23 @@ final class Access {
              mex.printStackTrace();
          }
 
+    }
+
+
+    public static String word(HashMap<String, ArrayList<Tasks>> lt){
+        List<String> keyList = new ArrayList<>(lt.keySet());
+
+        int size = keyList.size();
+        int randIdx = new Random().nextInt(size);
+        String randomKey = keyList.get(randIdx);
+        Tasks t;
+        do {
+            int s = lt.get(randomKey).size();
+            randIdx = new Random().nextInt(s);
+            t = lt.get(randomKey).get(randIdx);
+            System.out.println(t.isDone());
+        }while(t.isDone());
+
+        return t.getTitle();
     }
 }

@@ -21,9 +21,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements EventHandler<ActionEvent>, Initializable {
 
@@ -580,22 +578,25 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         } else {
             list = new HashMap<>();
         }
-        //System.out.println(list);
+
 
 
         Thread t = new Thread(() -> {
             while(true) {
                 try {
-                    Thread.sleep(2000 * 60 * 60);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Platform.runLater(new Tester());
+                Platform.runLater(new Tester("Un nouvelle tâche vous attend.", word(list)));
             }
         });
         t.start();
     }
 
+    private String word(HashMap<String, ArrayList<Tasks>> lt){
+        return Access.word(lt);
+    }
 
     private static int find(String s){
         int i = 0;
@@ -611,7 +612,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
 
     private void checker(){
         int i = 0;
-        if(eIndex != null) {
+        if(eIndex != null && list != null) {
             for (Tasks t : list.get(eIndex))
                 if (!t.isDone())
                     i++;
@@ -636,8 +637,14 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
 }
 
 class Tester implements Runnable{
+    String s, word;
+    public Tester(String s, String word) {
+        this.s = s;
+        this.word = word;
+    }
+
     @Override
     public void run() {
-        new NotifStage();
+        new NotifStage(s, word);
     }
 }
