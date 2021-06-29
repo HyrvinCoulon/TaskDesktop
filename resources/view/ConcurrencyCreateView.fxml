@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="346.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ConcurrencyCreateView">
+   <children>
+      <TextField fx:id="titlec" layoutX="152.0" layoutY="133.0" prefHeight="40.0" prefWidth="310.0" promptText="Donnez le titre..." />
+      <Label alignment="CENTER" layoutX="190.0" layoutY="37.0" prefHeight="40.0" prefWidth="220.0" text="Titre :" textAlignment="RIGHT" />
+      <ComboBox layoutX="152.0" layoutY="194.0" prefWidth="150.0" promptText="Donnez un heure ..." />
+      <ComboBox layoutX="312.0" layoutY="194.0" prefWidth="150.0" promptText="Donnez les minutes ..." />
+   </children>
+</AnchorPane>

@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -21,17 +22,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.*;
 
 public class Controller implements EventHandler<ActionEvent>, Initializable {
 
     ArrayList<Tasks> s = new ArrayList<>();
     ArrayList<Tasks> ss = new ArrayList<>();
+    LocalTime time;
     static HashMap<String, ArrayList<Tasks>> list;
 
 
     int lindex, displayTracker = 0;
-    private Boolean add = false, delete, edit = false;
+    private Boolean add = false, cadd = false, delete, edit = false, liste = false;
 
     static String eIndex;
 
@@ -39,13 +42,15 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     ScrollPane scrollpane;
 
     @FXML
-    AnchorPane feedpane;
+    AnchorPane feedpane, concurrentpane;
 
     @FXML
-    private Button ListButton, DeleteButton, feed, reduce,AddButton, EditButton, bAdd, aList, back, sendfeed;
+    private Button ListButton, DeleteButton, feed, reduce,AddButton, EditButton, bAdd, aList, back, sendfeed, addc;
 
     @FXML
-    private TextField namer, emailadd;
+    private TextField namer, emailadd, titlec;
+
+    @FXML private ComboBox<String> heure, minute;
 
     @FXML
     private Label titleTaskList;
@@ -114,15 +119,18 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                 }
                 break;
         }
+        eIndex = null;
     }
 
     @FXML
     public void handles(ActionEvent e) throws IOException { //Action doing by the main buttons List, Add, Delete and Edit
 
         checker();
-        mainpart();
         if(e.getSource() == ListButton){ // Show the List of List
+            mainpart();
             hide();
+            liste = true;
+            add = false;
             boxTask.getChildren().clear();
             for(String as : list.keySet()){
                 ControllerList cL = new ControllerList();
@@ -136,21 +144,34 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             }
         }else if(e.getSource() == AddButton){ // Show The List of the list with the add functions
             hide();
-            delete = edit = false;
+            mainpart();
+            delete = edit = liste = false;
             boxTask.getChildren().clear();
             init();
         }else if(e.getSource() == bAdd){ // Depend on which boolean is set
 
             if(add && displayTracker == 2){
-                boxTask.getChildren().add(initAdd(namer.getText()));
-                list.get(eIndex).add(new Tasks(namer.getText()));
-                namer.setText("");
-                save(list);
+                if(cadd == true){
+                    //boxTask.getChildren().add(initAdd(namer.getText()));
+                    list.get(eIndex).add(new Tasks(titlec.getText(), heure.getValue(), minute.getValue()));
+                    save(list);
+                }else{
+                    boxTask.getChildren().add(initAdd(namer.getText()));
+                    list.get(eIndex).add(new Tasks(namer.getText()));
+                    namer.setText("");
+                    save(list);
+                }
             }else if(add) { // Will add tasks
 
-                ss.add(new Tasks(namer.getText()));
-                add(namer.getText());
-                namer.setText("");
+                if(cadd == true){
+                    ss.add(new Tasks(titlec.getText(), heure.getValue(), minute.getValue()));
+                    add(titlec.getText());
+                    titlec.setText("");
+                }else {
+                    ss.add(new Tasks(namer.getText()));
+                    add(namer.getText());
+                    namer.setText("");
+                }
                 save(list);
 
             }else if(edit && displayTracker == 2){ // Will modify Title of Tasks
@@ -165,8 +186,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                 list.put(namer.getText().replace(" ", "_"), s);
                 namer.setText("");
                 save(list);
-
-            }else if(delete && displayTracker == 2){ // delete Tasks
+            }else if(delete == true && displayTracker == 2){ // delete Tasks
                 list.get(eIndex).remove(lindex);
                 save(list);
 
@@ -176,9 +196,15 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             }else{
 
                 if(namer.getPromptText().equals("Entrez le titre de la liste")) {
-                    titleTaskList.setText(namer.getText());
-                    namer.setText("");
-                    namer.setPromptText("Entrer les différentes taches :");
+                    if(cadd == true){
+                        titleTaskList.setText(namer.getText());
+                        namer.setText("");
+                        namer.setOpacity(0);
+                    }else {
+                        titleTaskList.setText(namer.getText());
+                        namer.setText("");
+                        namer.setPromptText("Entrer les différentes taches :");
+                    }
                     add = true;
                 }
             }
@@ -187,29 +213,32 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             //System.out.println(ss);
 
             list.put(titleTaskList.getText().replace(" ", "_"), ss);
-            System.out.println(list);
-
+            //System.out.println(list);
             titleTaskList.setText("");
-
             save(list);
-
             list = retrieveJ();
 
             ss = new ArrayList<>();
         }else if(e.getSource() == EditButton){// Show the display for modification of the list
             hide();
+            mainpart();
             boxTask.getChildren().clear();
-            delete = add = false;
+            delete = add = cadd = false;
             edit = true;
             initEdit();
         }else if(e.getSource() == DeleteButton){ // Part Of Deletion
             hide();
-            edit = add = false;
+            mainpart();
+            edit = add = cadd = false;
             delete = true;
             boxTask.getChildren().clear();
             initDelete();
         }else if(e.getSource() == feed){
             feedpart();
+        }else if(e.getSource() == addc){
+            boxTask.getChildren().clear();
+            init("c");
+            delete = false;
         }
 
     }
@@ -220,9 +249,19 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         feedpane.setOpacity(1);
     }
 
+    private void concurrentpart(){
+        //feedpane.setOpacity(0);
+        scrollpane.toBack();
+        concurrentpane.toFront();
+        concurrentpane.setOpacity(1);
+        scrollpane.setOpacity(0);
+    }
+
     private void mainpart(){
         feedpane.setOpacity(0);
         scrollpane.toFront();
+        concurrentpane.toBack();
+        concurrentpane.setOpacity(0);
         scrollpane.setOpacity(1);
     }
 
@@ -273,7 +312,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         cL.setId("addList");
         cL.setAction(this);
         boxTask.getChildren().add(n);
-        int i = 0;
+
         if(list != null){
             for(String as : list.keySet()){
                 ControllerList c = new ControllerList();
@@ -288,9 +327,32 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         }
     }
 
-    private Node intiTask(String s){ //Init Tasks for ListTask Section
+    private void init(String cs) throws IOException { //Initialisation of add part
         ControllerList cL = new ControllerList();
         FXMLLoader f = new FXMLLoader(getClass().getResource("/view/ModelActionTask.fxml"));
+        f.setController(cL);
+        Node n = f.load();
+        cL.setId("addList" + cs);
+        cL.setAction(this);
+        boxTask.getChildren().add(n);
+
+        if(list != null){
+            for(String as : list.keySet()){
+                ControllerList c = new ControllerList();
+                FXMLLoader fl = new FXMLLoader(getClass().getResource("/view/ModelActionTask.fxml"));
+                fl.setController(c);
+                Node nl = fl.load();
+                c.setLabelTask(as);
+                c.setId("addTask " + as);
+                c.setAction(this);
+                boxTask.getChildren().add(nl);
+            }
+        }
+    }
+
+    private Node intiTask(String s, String s1){ //Init Tasks for ListTask Section
+        ControllerList cL = new ControllerList();
+        FXMLLoader f = new FXMLLoader(getClass().getResource("/view/ConcurrentBloc.fxml"));
         f.setController(cL);
         Node n = null;
         try {
@@ -298,27 +360,27 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        cL.setLabelTask(s);
-        cL.setActionButtonId(s);
+        cL.set(s, s1);
+        cL.setButtonId(s);
 
         if(list.get(eIndex).get(find(s)).isDone()) {
             cL.setImage(new Image(String.valueOf(getClass().getResource("/images/checked.png"))));
-            cL.setStringB("Terminée");
+            //cL.setStringB("Terminée");
         }else{
             cL.setImage(new Image(String.valueOf(getClass().getResource("/images/progress.png"))));
-            cL.setStringB("En cours ..");
+            //cL.setStringB("En cours ..");
         }
 
-        cL.setAction(actionEvent1 -> {
-            Button bn = (Button) actionEvent1.getSource();
-            if(bn.getId().split(" ")[0].equals("actionButton")){
+        cL.setShow(actionEvent1 -> {
+            ImageView bn = (ImageView) actionEvent1.getSource();
+            if(bn.getId().split(" ")[0].equals("check")){
                 if(!list.get(eIndex).get(find(s)).isDone()) {
                     cL.setImage(new Image(String.valueOf(getClass().getResource("/images/checked.png"))));
-                    cL.setStringB("Terminée");
+                    //cL.setStringB("Terminée");
                     list.get(eIndex).get(find(s)).setDone(true);
                 }else{
                     cL.setImage(new Image(String.valueOf(getClass().getResource("/images/progress.png"))));
-                    cL.setStringB("En cours ..");
+                    //cL.setStringB("En cours ..");
                     list.get(eIndex).get(find(s)).setDone(false);
                 }
                 try {
@@ -380,7 +442,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         cL.setLabelTask(sL);
         cL.setId("e "+sI);
         cL.setStringB("edit");
-        cL.setImage(new Image(String.valueOf(getClass().getResource("/images/edit_tasks.png"))));
+        cL.setBImage(new Image(String.valueOf(getClass().getResource("/images/edit_tasks.png"))));
         cL.setAction(this);
 
         return n;
@@ -417,12 +479,16 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         boxTask.getChildren().add(n);
     }
 
+    /*public void handler(MouseEvent mouseEvent){
+        if(mouseEvent.getSource() == )
+    }*/
+
     @Override
     public void handle(ActionEvent actionEvent) {
         Button b = (Button) actionEvent.getSource();
         String sl = b.getId();
 
-        System.out.println(sl);
+        //System.out.println(sl);
 
         String ta = null, te = null, dT = null, dd = null, dTs = null, aT = null, el = null;
         switch (b.getId().split(" ")[0]) {
@@ -462,6 +528,14 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             displayTracker++;
         }
 
+        if(b.getId().equals("addListc")){
+            concurrentpart();
+            cadd = true;
+            show();
+            back.setOpacity(1);
+            displayTracker++;
+        }
+
         if(aT != null){
             boxTask.getChildren().clear();
             namer.setOpacity(1);
@@ -474,17 +548,17 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             for(Tasks as : list.get(aT))
                 boxTask.getChildren().add(initAddTask(as.getTitle()));
 
-            System.out.println(aT);
+            //System.out.println(aT);
             eIndex = aT;
         }
 
         //Take to the display of taskList selected
-        if(list.size() != 0) {
+        if(list.size() != 0 && liste == true ){
             boxTask.getChildren().clear();
             eIndex = sl;
             if(list.containsKey(sl))
                 for (Tasks ts : list.get(sl))
-                    boxTask.getChildren().add(intiTask(ts.getTitle()));
+                    boxTask.getChildren().add(intiTask(ts.getTitle(), ts.getLocalTime().toString()));
         }
 
 
@@ -578,17 +652,19 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         } else {
             list = new HashMap<>();
         }
-
-
+        comboinit();
 
         Thread t = new Thread(() -> {
             while(true) {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(
+                            60 *   // seconds to a minute
+                            1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Platform.runLater(new Tester("Un nouvelle tâche vous attend.", word(list)));
+                if(list.size() != 0)
+                    Platform.runLater(new Tester("Un nouvelle tâche vous attend.", word(list)));
             }
         });
         t.start();
@@ -612,6 +688,8 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
 
     private void checker(){
         int i = 0;
+
+        System.out.println(eIndex);
         if(eIndex != null && list != null) {
             for (Tasks t : list.get(eIndex))
                 if (!t.isDone())
@@ -625,7 +703,22 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         }
     }
 
-    private void feeback(String ad, String mes){
+    void comboinit(){
+        for(int i = 0; i < 61; i++){
+            if(i < 10){
+                heure.getItems().add("0" + i);
+                minute.getItems().add("0" + i);
+            }else if(i < 25){
+                heure.getItems().add(String.valueOf(i));
+                minute.getItems().add(String.valueOf(i));
+            }else{
+                minute.getItems().add(String.valueOf(i));
+            }
+
+        }
+    }
+
+    /*private void feeback(String ad, String mes){
         Access.Feedback(ad, mes);
     }
 
@@ -633,7 +726,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     public void handleFeed(ActionEvent actionEvent) {
         if(actionEvent.getSource() == sendfeed)
             feeback(emailadd.getText(), feedcomment.getText());
-    }
+    }*/
 }
 
 class Tester implements Runnable{

@@ -7,13 +7,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 
 public class ControllerList {
     private int id;
 
     @FXML
-    private ImageView image;
+    private ImageView image, check;
 
     public int getId() {
         return id;
@@ -24,7 +25,7 @@ public class ControllerList {
     }
 
     @FXML
-    private Label labelTask, NameList;
+    private Label labelTask, NameList, hour, title;
 
     @FXML
     private Button actionButton, show;
@@ -39,11 +40,17 @@ public class ControllerList {
         NameList.setText(s);
     } //Name for the list
 
+    @FXML public void set(String s, String s1){
+        title.setText(s);
+        hour.setText(s1);
+    }
+
     //Action for the name of task
     @FXML
     public void setAction(EventHandler<ActionEvent> e){//It will show the namer of task and the button for add, delete or edit
         actionButton.setOnAction(e);
     }
+
     @FXML
     public void setId(String s){
         actionButton.setId(s);
@@ -52,6 +59,14 @@ public class ControllerList {
     @FXML
     public void Opacity(){
         actionButton.setOpacity(0);
+    }
+
+    @FXML public void setButtonId(String s){
+        check.setId(check.getId() + " " + s);
+    }
+
+    @FXML public void setShow(EventHandler<MouseEvent> e){
+        check.setOnMouseClicked(e);
     }
 
     @FXML
@@ -65,14 +80,16 @@ public class ControllerList {
 
     //Action for the display of the tasks
     @FXML
-    public void setImage(Image i){
-        image.setImage(i);
-    }
+    public void setImage(Image i){ check.setImage(i); }
+
+    @FXML
+    public void setBImage(Image i){ image.setImage(i); }
 
     @FXML
     public void setActionButtonId(String s){
         actionButton.setId(actionButton.getId() + " " + s);
     }
+
 
     @FXML
     public void setActionShow(EventHandler<ActionEvent> e){

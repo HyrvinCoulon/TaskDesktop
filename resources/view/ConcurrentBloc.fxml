@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="52.0" prefWidth="636.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="title" layoutY="14.0" prefHeight="24.0" prefWidth="235.0" />
+      <Label fx:id="hour" layoutX="287.0" layoutY="14.0" prefHeight="24.0" prefWidth="104.0" />
+      <ImageView fx:id="check" fitHeight="46.0" fitWidth="47.0" layoutX="583.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/progress.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

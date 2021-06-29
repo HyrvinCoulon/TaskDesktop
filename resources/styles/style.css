@@ -11,6 +11,13 @@
   -fx-font-family:Ailerons;
 }
 
+.combo-box .list-cell{
+  -fx-background-color:white;
+  -fx-background:transparent;
+  -fx-text-color:#009BFD;
+
+}
+
 .button:hover{
    -fx-effect: dropshadow(three-pass-box, #009BFD, 15, 0, 0, 0);
 }

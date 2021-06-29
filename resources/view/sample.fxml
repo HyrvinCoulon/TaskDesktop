@@ -33,6 +33,15 @@
                               </ImageView>
                            </graphic>
                         </Button>
+                        <Button fx:id="addc" alignment="BASELINE_LEFT" graphicTextGap="13.0" lineSpacing="3.0" mnemonicParsing="false" onAction="#handles" prefHeight="30.0" prefWidth="142.0" text="Add..">
+                           <graphic>
+                              <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/clock.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                         <Button fx:id="DeleteButton" alignment="BASELINE_LEFT" graphicTextGap="6.0" mnemonicParsing="false" onAction="#handles" prefHeight="27.0" prefWidth="141.0" text=" Delete..">
                            <graphic>
                               <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true">
@@ -89,6 +98,14 @@
          <center>
             <AnchorPane prefHeight="386.0" prefWidth="657.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
                <children>
+                  <AnchorPane fx:id="concurrentpane" opacity="0.0" prefHeight="386.0" prefWidth="719.0">
+                          <children>
+                             <TextField fx:id="titlec" layoutX="152.0" layoutY="133.0" prefHeight="40.0" prefWidth="396.0" promptText="Donnez le titre..." />
+                             <Label alignment="CENTER" layoutX="250.0" layoutY="40.0" prefHeight="40.0" prefWidth="220.0" text="Titre :" textAlignment="RIGHT" />
+                             <ComboBox fx:id="heure" layoutX="152.0" layoutY="194.0" prefHeight="25.0" prefWidth="171.0" promptText="Donnez un heure ..." styleClass="combo-box" stylesheets="@../styles/style.css" />
+                             <ComboBox fx:id="minute" layoutX="384.0" layoutY="194.0" prefHeight="25.0" prefWidth="170.0" promptText="Donnez les minutes ..." />
+                          </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="feedpane" opacity="0.0" prefHeight="387.0" prefWidth="719.0">
                      <children>
                         <Label alignment="CENTER" layoutX="242.0" layoutY="14.0" prefHeight="36.0" prefWidth="235.0" stylesheets="@../styles/style.css" text="Feedback">
@@ -98,7 +115,7 @@
                         </Label>
                         <TextField fx:id="emailadd" layoutX="156.0" layoutY="78.0" prefHeight="27.0" prefWidth="402.0" promptText="Votre email ..." styleClass="text-field" stylesheets="@../styles/style.css" />
                         <TextArea fx:id="feedcomment" layoutX="157.0" layoutY="123.0" prefHeight="200.0" prefWidth="401.0" promptText="Votre commentaire..." style="-fx-background-color: black;" styleClass="text-area" stylesheets="@../styles/style.css" />
-                        <Button fx:id="sendfeed" layoutX="299.0" layoutY="336.0" mnemonicParsing="false" onAction="#handleFeed" prefHeight="30.0" prefWidth="122.0" text="Send">
+                        <Button fx:id="sendfeed" layoutX="299.0" layoutY="336.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" text="Send">
                            <graphic>
                               <ImageView fitHeight="31.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

@@ -154,7 +154,7 @@ final class Access {
         }
     }
 
-    public static void Feedback(String a, String m){
+    /*public static void Feedback(String a, String m){
 
          // Recipient's email ID needs to be mentioned.
          String to = "bangolamoukogho@gmail.com";
@@ -199,7 +199,7 @@ final class Access {
              mex.printStackTrace();
          }
 
-    }
+    }*/
 
 
     public static String word(HashMap<String, ArrayList<Tasks>> lt){
