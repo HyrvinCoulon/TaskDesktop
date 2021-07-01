@@ -13,6 +13,7 @@ public class Tasks implements Serializable {
 
     Tasks(String title){
         this.title = title;
+        localTime = LocalTime.parse("00:00");
     }
 
     Tasks(String title, String h, String m){
@@ -37,7 +38,11 @@ public class Tasks implements Serializable {
     }
 
     public LocalTime getLocalTime() {
-        return localTime;
+        if(localTime == null){
+            return null;
+        }else {
+            return localTime;
+        }
     }
 
     public void setLocalTime(LocalTime localTime) {

@@ -11,12 +11,80 @@
   -fx-font-family:Ailerons;
 }
 
+.combo-box{
+  -fx-border-color:black;
+}
+
 .combo-box .list-cell{
-  -fx-background-color:white;
+  -fx-background-color:black;
   -fx-background:transparent;
   -fx-text-color:#009BFD;
+}
+
+.combo-box .list-view{
+  -fx-border-color:black;
+}
+
+.combo-box .list-view .list-cell:hover{
+  -fx-background-color:white;
+  -fx-text-fill:#009BFD;
+}
+
+.combo-box .arrow, .combo-box .arrow-button{
+    -fx-background-color: black;
+    -fx-border-color:black;
+}
+
+.combo-box .scroll-bar{
+  -fx-background-color:black;
+}
+
+.combo-box .scroll-bar:vertical,
+.combo-box .scroll-bar:horizontal
+{
+    -fx-background-color: black;
+    -fx-background-radius: 0;
 
 }
+
+.combo-box .scroll-bar:vertical .track
+{
+    -fx-background-color: black;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 2em;
+}
+
+
+.combo-box .scroll-bar:horizontal .decrement-button
+{
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 0 10 0;
+}
+
+.combo-box .scroll-bar:vertical .decrement-button
+{
+
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 10 0 0;
+}
+
+.combo-box .scroll-bar .increment-arrow,
+.combo-box .scroll-bar .decrement-arrow
+{
+    -fx-padding: -2;
+}
+
+.combo-box .scroll-bar:vertical .thumb,
+.combo-box .scroll-bar:horizontal .thumb
+{
+    -fx-background-color: derive(black,90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}
+
 
 .button:hover{
    -fx-effect: dropshadow(three-pass-box, #009BFD, 15, 0, 0, 0);

@@ -1,13 +1,11 @@
 package sample;
 
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -16,7 +14,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-//import org.jetbrains.annotations.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,13 +21,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Controller implements EventHandler<ActionEvent>, Initializable {
 
     ArrayList<Tasks> s = new ArrayList<>();
     ArrayList<Tasks> ss = new ArrayList<>();
-    LocalTime time;
     static HashMap<String, ArrayList<Tasks>> list;
+    String[] flagers;
+    ScheduledExecutorService service;
 
 
     int lindex, displayTracker = 0;
@@ -62,6 +63,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
 
     @FXML
     public void closeWindow(MouseEvent m){
+        service.shutdown();
         System.exit(0);
     }
 
@@ -91,6 +93,14 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                     displayTracker--;
                     add = false;
                 }
+                if(cadd){
+                        cadd = false;
+                        mainpart();
+                        back.setOpacity(0);
+                        boxTask.getChildren().clear();
+                        init();
+                        displayTracker -= 1;
+                }
                 back.setOpacity(0);
                 break;
             case 2:
@@ -116,6 +126,13 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                     boxTask.getChildren().clear();
                     init();
                     displayTracker -= 2;
+                }if(cadd){
+                    cadd = false;
+                    mainpart();
+                    back.setOpacity(0);
+                    boxTask.getChildren().clear();
+                    init();
+                    displayTracker -= 2;
                 }
                 break;
         }
@@ -130,7 +147,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             mainpart();
             hide();
             liste = true;
-            add = false;
+            add = cadd = false;
             boxTask.getChildren().clear();
             for(String as : list.keySet()){
                 ControllerList cL = new ControllerList();
@@ -145,14 +162,13 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         }else if(e.getSource() == AddButton){ // Show The List of the list with the add functions
             hide();
             mainpart();
-            delete = edit = liste = false;
+            delete = edit = liste = cadd = false;
             boxTask.getChildren().clear();
             init();
         }else if(e.getSource() == bAdd){ // Depend on which boolean is set
 
             if(add && displayTracker == 2){
                 if(cadd == true){
-                    //boxTask.getChildren().add(initAdd(namer.getText()));
                     list.get(eIndex).add(new Tasks(titlec.getText(), heure.getValue(), minute.getValue()));
                     save(list);
                 }else{
@@ -161,6 +177,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                     namer.setText("");
                     save(list);
                 }
+                flagers = flager();
             }else if(add) { // Will add tasks
 
                 if(cadd == true){
@@ -173,12 +190,18 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                     namer.setText("");
                 }
                 save(list);
-
+                flagers = flager();
             }else if(edit && displayTracker == 2){ // Will modify Title of Tasks
 
-                list.get(eIndex).set(lindex, new Tasks(namer.getText()));
-                namer.setText("");
-                save(list);
+                if(cadd == true){
+                    list.get(eIndex).set(lindex, new Tasks(titlec.getText(), heure.getValue(), minute.getValue()));
+                    titlec.setText("");
+                    save(list);
+                }else {
+                    list.get(eIndex).set(lindex, new Tasks(namer.getText()));
+                    namer.setText("");
+                    save(list);
+                }
 
             }else if(edit){// Will modify Title of list
                 s = list.get(eIndex);
@@ -186,6 +209,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                 list.put(namer.getText().replace(" ", "_"), s);
                 namer.setText("");
                 save(list);
+                flagers = flager();
             }else if(delete == true && displayTracker == 2){ // delete Tasks
                 list.get(eIndex).remove(lindex);
                 save(list);
@@ -193,6 +217,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             }else if(delete){ // Delete List
                 list.remove(eIndex);
                 save(list);
+                flagers = flager();
             }else{
 
                 if(namer.getPromptText().equals("Entrez le titre de la liste")) {
@@ -208,6 +233,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
                     add = true;
                 }
             }
+
         }else if(e.getSource() == aList){ // Will add the new List to The super List
 
             //System.out.println(ss);
@@ -279,7 +305,6 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     }
 
     private void initDelete() throws IOException {
-        int i = 0;
         for(String as : list.keySet()){
             ControllerAction c = new ControllerAction();
             FXMLLoader fl = new FXMLLoader(getClass().getResource("/view/ModelAction2.fxml"));
@@ -360,7 +385,9 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         cL.set(s, s1);
+
         cL.setButtonId(s);
 
         if(list.get(eIndex).get(find(s)).isDone()) {
@@ -538,36 +565,53 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
 
         if(aT != null){
             boxTask.getChildren().clear();
-            namer.setOpacity(1);
             bAdd.setOpacity(1);
             back.setOpacity(1);
             displayTracker += 2;
             add = true;
-            namer.setText("");
-            namer.setPromptText("Entrez la nouvelle tache:");
-            for(Tasks as : list.get(aT))
-                boxTask.getChildren().add(initAddTask(as.getTitle()));
-
+            if(Arrays.asList(flagers).contains(aT)){
+                concurrentpart();
+                cadd = true;
+            }else {
+                namer.setOpacity(1);
+                namer.setText("");
+                namer.setPromptText("Entrez la nouvelle tache:");
+                for (Tasks as : list.get(aT))
+                    boxTask.getChildren().add(initAddTask(as.getTitle()));
+            }
             //System.out.println(aT);
             eIndex = aT;
         }
 
         //Take to the display of taskList selected
         if(list.size() != 0 && liste == true ){
-            boxTask.getChildren().clear();
-            eIndex = sl;
-            if(list.containsKey(sl))
-                for (Tasks ts : list.get(sl))
-                    boxTask.getChildren().add(intiTask(ts.getTitle(), ts.getLocalTime().toString()));
+            try {
+                boxTask.getChildren().clear();
+                eIndex = sl;
+                if (list.containsKey(sl))
+                    for (Tasks ts : list.get(sl)) {
+                        if(ts.getLocalTime().toString().equals("00:00"))
+                            boxTask.getChildren().add(intiTask(ts.getTitle(), ""));
+                        else
+                            boxTask.getChildren().add(intiTask(ts.getTitle(), Objects.requireNonNullElse(ts.getLocalTime().toString(), "")));
+                    }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
 
         if(ta != null){ // Récupère l'indice de la liste ou la tache voulue
             boxTask.getChildren().clear();
-            namer.setOpacity(1);
             bAdd.setOpacity(1);
             back.setOpacity(1);
             displayTracker++;
+            if(Arrays.asList(flagers).contains(eIndex)){
+                cadd = true;
+                concurrentpart();
+            }else{
+                namer.setOpacity(1);
+            }
             lindex = Integer.parseInt(ta);
         }
 
@@ -577,6 +621,9 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             bAdd.setOpacity(1);
             back.setOpacity(1);
             displayTracker++;
+            if(Arrays.asList(flagers).contains(el)){
+                cadd = true;
+            }
             eIndex = el;
         }
 
@@ -654,6 +701,11 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         }
         comboinit();
 
+        if(list.size() != 0)
+            flagers = flager();
+        ConcurrentInit();
+        //System.out.println(Arrays.toString(flagers));
+
         Thread t = new Thread(() -> {
             while(true) {
                 try {
@@ -668,6 +720,23 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             }
         });
         t.start();
+    }
+
+    private void ConcurrentInit(){
+        service = Executors.newScheduledThreadPool(list.size());
+        for(String s1 : list.keySet()){
+            Runnable r = () -> {
+                for(Tasks t : list.get(s1)){
+                    int minutes = LocalTime.now().getMinute() - t.getLocalTime().getMinute();
+                    if(minutes < 0)
+                        minutes *= -1;
+                    if(t.isDone() == false && minutes >= 30){
+                        Platform.runLater(new Tester("Un nouvelle tâche vous attend.", word(list)));
+                    }
+                }
+            };
+            service.scheduleAtFixedRate(r, 2, 10, TimeUnit.SECONDS);
+        }
     }
 
     private String word(HashMap<String, ArrayList<Tasks>> lt){
@@ -690,7 +759,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         int i = 0;
 
         System.out.println(eIndex);
-        if(eIndex != null && list != null) {
+        if(eIndex != null && list != null && cadd == false) {
             for (Tasks t : list.get(eIndex))
                 if (!t.isDone())
                     i++;
@@ -716,6 +785,18 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             }
 
         }
+    }
+
+    String[] flager(){
+        String[] l = new String[list.size()];
+        int i = 0;
+        for(String sss : list.keySet()){
+            if(!list.get(sss).get(0).getLocalTime().toString().equals("00:00")){
+                l[i] = sss;
+                i++;
+            }
+        }
+        return l;
     }
 
     /*private void feeback(String ad, String mes){
