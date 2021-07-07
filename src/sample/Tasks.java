@@ -7,9 +7,17 @@ import java.util.Date;
 
 public class Tasks implements Serializable {
     private String title = "";
-    private boolean done = false;
+    private boolean done = false, notdone = false;
     //private Date date;
     private LocalTime localTime;
+
+    public boolean isNotdone() {
+        return notdone;
+    }
+
+    public void setNotdone(boolean notdone) {
+        this.notdone = notdone;
+    }
 
     Tasks(String title){
         this.title = title;

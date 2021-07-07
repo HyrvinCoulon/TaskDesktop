@@ -49,7 +49,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     private Button ListButton, DeleteButton, feed, reduce,AddButton, EditButton, bAdd, aList, back, sendfeed, addc;
 
     @FXML
-    private TextField namer, emailadd, titlec;
+    private TextField namer, emailadd, nameadd, titlec;
 
     @FXML private ComboBox<String> heure, minute;
 
@@ -63,7 +63,8 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
 
     @FXML
     public void closeWindow(MouseEvent m){
-        service.shutdown();
+        if(service != null)
+            service.shutdown();
         System.exit(0);
     }
 
@@ -264,20 +265,21 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         }else if(e.getSource() == addc){
             boxTask.getChildren().clear();
             init("c");
-            delete = false;
+            delete = edit = add = false;
         }
 
     }
 
     private void feedpart(){
         scrollpane.setOpacity(0);
+        concurrentpane.setOpacity(0);
         feedpane.toFront();
         feedpane.setOpacity(1);
     }
 
     private void concurrentpart(){
         //feedpane.setOpacity(0);
-        scrollpane.toBack();
+        //scrollpane.toBack();
         concurrentpane.toFront();
         concurrentpane.setOpacity(1);
         scrollpane.setOpacity(0);
@@ -398,17 +400,23 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             //cL.setStringB("En cours ..");
         }
 
+        if(list.get(eIndex).get(find(s)).isNotdone()){
+            cL.setImage(new Image(String.valueOf(getClass().getResource("/images/fail.png"))));
+        }
+
         cL.setShow(actionEvent1 -> {
             ImageView bn = (ImageView) actionEvent1.getSource();
             if(bn.getId().split(" ")[0].equals("check")){
-                if(!list.get(eIndex).get(find(s)).isDone()) {
-                    cL.setImage(new Image(String.valueOf(getClass().getResource("/images/checked.png"))));
-                    //cL.setStringB("Terminée");
-                    list.get(eIndex).get(find(s)).setDone(true);
-                }else{
-                    cL.setImage(new Image(String.valueOf(getClass().getResource("/images/progress.png"))));
-                    //cL.setStringB("En cours ..");
-                    list.get(eIndex).get(find(s)).setDone(false);
+                if(!list.get(eIndex).get(find(s)).isNotdone()) {
+                    if (!list.get(eIndex).get(find(s)).isDone()) {
+                        cL.setImage(new Image(String.valueOf(getClass().getResource("/images/checked.png"))));
+                        //cL.setStringB("Terminée");
+                        list.get(eIndex).get(find(s)).setDone(true);
+                    } else {
+                        cL.setImage(new Image(String.valueOf(getClass().getResource("/images/progress.png"))));
+                        //cL.setStringB("En cours ..");
+                        list.get(eIndex).get(find(s)).setDone(false);
+                    }
                 }
                 try {
                     save(list);
@@ -553,6 +561,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             show();
             back.setOpacity(1);
             displayTracker++;
+            eIndex = b.getId().split(" ")[1];
         }
 
         if(b.getId().equals("addListc")){
@@ -561,6 +570,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             show();
             back.setOpacity(1);
             displayTracker++;
+            eIndex = b.getId().split(" ")[1];
         }
 
         if(aT != null){
@@ -699,17 +709,18 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         } else {
             list = new HashMap<>();
         }
+
         comboinit();
 
         if(list.size() != 0)
             flagers = flager();
         ConcurrentInit();
-        //System.out.println(Arrays.toString(flagers));
 
         Thread t = new Thread(() -> {
             while(true) {
                 try {
                     Thread.sleep(
+                            60 *
                             60 *   // seconds to a minute
                             1000);
                 } catch (InterruptedException e) {
@@ -723,19 +734,28 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     }
 
     private void ConcurrentInit(){
-        service = Executors.newScheduledThreadPool(list.size());
-        for(String s1 : list.keySet()){
-            Runnable r = () -> {
-                for(Tasks t : list.get(s1)){
-                    int minutes = LocalTime.now().getMinute() - t.getLocalTime().getMinute();
-                    if(minutes < 0)
-                        minutes *= -1;
-                    if(t.isDone() == false && minutes >= 30){
-                        Platform.runLater(new Tester("Un nouvelle tâche vous attend.", word(list)));
+        if(list.size() != 0) {
+            service = Executors.newScheduledThreadPool(list.size());
+            for (String s1 : list.keySet()) {
+                Runnable r = () -> {
+                    for (Tasks t : list.get(s1)) {
+                        int minutes = LocalTime.now().getMinute() - t.getLocalTime().getMinute();
+                        int hour = LocalTime.now().getHour() - t.getLocalTime().getHour();
+                        if(hour < 0) {
+                            if (minutes < 0)
+                                minutes *= -1;
+                            hour *= -1;
+                            System.out.println(t.isDone() + " " + t.isNotdone() + " " + hour);
+                            if(!t.isDone() && minutes <= 30 && hour == 0 && !t.isNotdone()) {
+                                Platform.runLater(new Tester("Un nouvelle tâche vous attend.", word(list)));
+                            }
+                            if(minutes < 0)
+                                t.setNotdone(true);
+                        }
                     }
-                }
-            };
-            service.scheduleAtFixedRate(r, 2, 10, TimeUnit.SECONDS);
+                };
+                service.scheduleAtFixedRate(r, 2, 60, TimeUnit.SECONDS);
+            }
         }
     }
 
@@ -773,7 +793,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     }
 
     void comboinit(){
-        for(int i = 0; i < 61; i++){
+        for(int i = 0; i < 60; i++){
             if(i < 10){
                 heure.getItems().add("0" + i);
                 minute.getItems().add("0" + i);
@@ -799,15 +819,19 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         return l;
     }
 
-    /*private void feeback(String ad, String mes){
-        Access.Feedback(ad, mes);
+    private void feeback(String name, String ad, String mes){
+        try {
+            Access.Feedback(name, ad, mes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     public void handleFeed(ActionEvent actionEvent) {
         if(actionEvent.getSource() == sendfeed)
-            feeback(emailadd.getText(), feedcomment.getText());
-    }*/
+            feeback(nameadd.getText(), emailadd.getText(), feedcomment.getText());
+    }
 }
 
 class Tester implements Runnable{

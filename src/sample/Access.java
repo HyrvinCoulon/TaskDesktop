@@ -2,8 +2,16 @@ package sample;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.hc.client5.http.fluent.Form;
+import org.apache.hc.client5.http.fluent.Request;
+import org.apache.hc.core5.http.HttpResponse;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -200,6 +208,38 @@ final class Access {
          }
 
     }*/
+
+    static void Feedback(String name, String email, String message) throws IOException {
+        URL url = new URL("https://hyrvin.pythonanywhere.com/gateway_user/feedback/create/");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        //con.setRequestProperty("Accept", "application/json");
+        con.setDoOutput(true);
+
+        String jsonInputString = "{\"username\": \""+ name +"\", \"email\": \""+ email +"\", \"message\" : \""+ message + "\", \"type_feedback\" : \"DesktopTask\" }";
+
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+
+        try(BufferedReader br = new BufferedReader(
+                new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+        }
+
+       /* HttpResponse response = Request.post("https://hyrvin.pythonanywhere.com/gateway_user/feedback/create/").bodyForm(
+                Form.form().add("username", name).add("email", email)
+                        .add("message", message).add("typpe_feedback", "DesktopTask")
+                        .build())
+                .execute().returnResponse();*/
+    }
 
 
     public static String word(HashMap<String, ArrayList<Tasks>> lt){
