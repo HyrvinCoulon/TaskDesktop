@@ -498,7 +498,7 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
         cL.setLabelTask(sL);
         cL.setId("dd "+sI);
         cL.setStringB("delete");
-        cL.setImage(new Image(String.valueOf(getClass().getResource("/images/delete_tasks.png"))));
+        cL.setBImage(new Image(String.valueOf(getClass().getResource("/images/delete_tasks.png"))));
         cL.setAction(this);
 
         return n;
@@ -561,7 +561,6 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             show();
             back.setOpacity(1);
             displayTracker++;
-            eIndex = b.getId().split(" ")[1];
         }
 
         if(b.getId().equals("addListc")){
@@ -570,7 +569,6 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
             show();
             back.setOpacity(1);
             displayTracker++;
-            eIndex = b.getId().split(" ")[1];
         }
 
         if(aT != null){
@@ -736,25 +734,27 @@ public class Controller implements EventHandler<ActionEvent>, Initializable {
     private void ConcurrentInit(){
         if(list.size() != 0) {
             service = Executors.newScheduledThreadPool(list.size());
-            for (String s1 : list.keySet()) {
+            for (String s1 : flagers) {
                 Runnable r = () -> {
+                    //System.out.println(s1);
                     for (Tasks t : list.get(s1)) {
                         int minutes = LocalTime.now().getMinute() - t.getLocalTime().getMinute();
                         int hour = LocalTime.now().getHour() - t.getLocalTime().getHour();
-                        if(hour < 0) {
+                        if(hour <= 0) {
+                            if(minutes > 0 && hour == 0 && !t.isDone())
+                                t.setNotdone(true);
                             if (minutes < 0)
                                 minutes *= -1;
                             hour *= -1;
-                            System.out.println(t.isDone() + " " + t.isNotdone() + " " + hour);
-                            if(!t.isDone() && minutes <= 30 && hour == 0 && !t.isNotdone()) {
+                            System.out.println(hour + " : " + minutes);
+                            System.out.println(t.isDone() + " " + t.isNotdone() + " " );
+                            if(t.isDone() == false && hour == 0 && minutes <= 30 && t.isNotdone() == false) {
                                 Platform.runLater(new Tester("Un nouvelle tâche vous attend.", word(list)));
                             }
-                            if(minutes < 0)
-                                t.setNotdone(true);
                         }
                     }
                 };
-                service.scheduleAtFixedRate(r, 2, 60, TimeUnit.SECONDS);
+                service.scheduleAtFixedRate(r, 2, 20, TimeUnit.SECONDS);
             }
         }
     }
